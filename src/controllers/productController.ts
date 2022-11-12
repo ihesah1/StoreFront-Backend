@@ -19,7 +19,6 @@ export const create = async(req:Request,res:Response)=>{
     throw new Error(`there is error in handlers ${err}`)
 }}
 
-
 export const index = async(req:Request,res:Response)=>{
    const product= await productModel.index()
    res.json({

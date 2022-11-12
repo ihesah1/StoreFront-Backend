@@ -39,13 +39,33 @@ export class OrdersModel{
         conn.release();
         return result.rows[0];
     }
-    async addProductToOrder(product:product_order):Promise<product_order>{
+
+
+
+              //Products in Order\\
+              
+    async addProductToOrder(p_o:product_order):Promise<product_order>{
         const conn = await Client.connect();
-        const {order_id,product_id,quantity}=product;
+        const {order_id,product_id,quantity}=p_o;
         const sql = `INSERT INTO products_order(order_id,product_id,quantity)values($1,$2,$3)
         RETURNING *`
         const result = await conn.query(sql,[order_id,product_id,quantity])
         conn.release();
         return result.rows[0];
+    }
+    async getProductFromOrder(productId:number):Promise<product_order>{
+        const conn = await Client.connect();
+        const sql = `SELECT product_id FROM products_order WHERE id=$1`
+        const result = await conn.query(sql,[productId])
+        conn.release();
+        return result.rows[0];
+    }
+    
+    async getOrdersByUser(id:number):Promise<product_order[]>{
+        const conn = await Client.connect();
+        const sql =`SELECT * FROM products_order WHERE user_id=$1`;
+        const result = await conn.query(sql,[id])
+        conn.release();
+        return result.rows;
     }
 }
