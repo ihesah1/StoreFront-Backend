@@ -1,29 +1,34 @@
 import { Query, QueryResult } from "pg";
 import Client from "../database";
 import {user_type} from '../types/userType';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
+const {BCRYPT_PASSWORD, SALT_ROUNDS} = process.env
 
 //this class represent the database
 export class UserModel{
 
               // Create User \\
     async create(user:user_type):Promise<user_type>{
+       
         const {email,first_name,last_name,password}=user;
         //open connection
-    try{  
+      try{  
         const conn = await Client.connect();
         //write query
          const sql = `INSERT INTO users(email,first_name,last_name,password)
         values($1,$2,$3,$4) returning *`;
-        
+         const hash = bcrypt.hashSync(password + BCRYPT_PASSWORD,
+            parseInt(SALT_ROUNDS as string ,10)
+        )
         //run query
         const { rows } = await conn.query(sql,[
             email,
             first_name,
             last_name,
-            password
+            hash
         ]);
-        
         //close the connection 
         conn.release();
         return rows[0]
@@ -83,7 +88,23 @@ export class UserModel{
         conn.release();
         return result.rows[0]
     }
-      
 
+
+      async auth(email:string, password:string):Promise<user_type | null>{
+        const conn = await Client.connect();
+        const sql = `SELECT password FROM users WHERE email=($1) `
+        const {rows} = await conn.query(sql,[email])
+       
+        console.log(password+BCRYPT_PASSWORD);
+        
+        if (rows.length > 0) {
+            const user = rows[0]
+            console.log(user);
+            
+            if (bcrypt.compareSync(password + BCRYPT_PASSWORD, user.password)) {
+              return user
+            }
+      } conn.release();
+      return null;
 }
-             
+}             

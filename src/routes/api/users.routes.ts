@@ -1,5 +1,5 @@
 import express  from "express";
-import {create, deleteUser, update} from '../../controllers/userController';
+import {auth, create, deleteUser, update} from '../../controllers/userController';
 import { index } from "../../controllers/userController";
 import { read } from "../../controllers/userController";
 
@@ -12,7 +12,7 @@ routes.get('/users',index);
 routes.get('/users/:id',read)
 routes.patch('/users/:id', update)
 routes.delete('/users/:id', deleteUser)
-  
+routes.post('/auth',auth)
 
 
 

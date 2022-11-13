@@ -75,6 +75,12 @@ export const deleteUser = async(req:Request,res:Response)=>{
     const delUser = await userModel.delete(req.params.id as unknown as number)
     res.json({
         message:'the user deleted Successfully .',
-        data:{ delUser }
     })
+}
+
+
+export const auth = async(req:Request,res:Response)=>{
+    const { email, password } = req.body;
+    const user = await userModel.auth(email,password);
+    res.json(user)
 }
