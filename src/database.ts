@@ -8,13 +8,16 @@ const {
     POSTGRES_DB,
     POSTGRES_USER,
     POSTGRES_PASSWORD,
+    POSTGRES_DB_test,
+    ENV
 } = process.env 
+
 
 const Client = new Pool({
     host: POSTGRES_HOST,
-    database: POSTGRES_DB,
+    database: ENV === "dev" ? POSTGRES_DB : POSTGRES_DB_test,
     user: POSTGRES_USER,
     password: POSTGRES_PASSWORD,
 })
 
-export default Client
+export default Client;

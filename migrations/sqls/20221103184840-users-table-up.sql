@@ -1,5 +1,5 @@
 /* Replace with your SQL commands */
---create table users
+
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
     email VARCHAR(50) UNIQUE,

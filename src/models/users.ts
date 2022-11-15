@@ -2,7 +2,6 @@ import { Query, QueryResult } from "pg";
 import Client from "../database";
 import {user_type} from '../types/userType';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 const {BCRYPT_PASSWORD, SALT_ROUNDS} = process.env
 

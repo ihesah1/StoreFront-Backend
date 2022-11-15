@@ -6,6 +6,7 @@
 import Client from "../database";
 import { order_type } from "../types/orderType";
 import { product_order } from "../types/products_order";
+import { env } from "process";
 
 
 export class OrdersModel{
@@ -39,7 +40,13 @@ export class OrdersModel{
         conn.release();
         return result.rows[0];
     }
-
+    async delete(id:number):Promise<order_type>{
+        const conn = await Client.connect();
+        const sql = `DELETE FROM orders WHERE id=$1 RETURNING * `
+        const result = await conn.query(sql,[id])
+        conn.release();
+        return result.rows[0]
+    }
 
 
               //Products in Order\\
