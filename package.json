@@ -10,7 +10,8 @@
     "dev": "nodemon src/index.ts",
     "start": "npm run build && node build/index.js",
     "jasmine": "jasmine",
-    "test": "set NODE_ENV=test && db-migrate --env test up && npm run build && npm run jasmine && db-migrate --env test reset"
+    "test": "set NODE_ENV=test  && npm run build && npm run jasmine && db-migrate --NODE_ENV test reset&& db-migrate  down ",
+    "reset-test-db": "db-migrate reset -e test"
   },
   "keywords": [],
   "author": "",

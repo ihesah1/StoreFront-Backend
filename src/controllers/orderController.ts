@@ -11,7 +11,6 @@ try {
     try{
         jwt.verify(req.body.token , process.env.TOKEN_SECRET as string)
     }catch(err){
-        res.status(401)
         res.json(`Invalid Token ${err}`)
         return
     }

@@ -1,4 +1,3 @@
-import { Query, QueryResult } from "pg";
 import Client from "../database";
 import {user_type} from '../types/userType';
 import bcrypt from 'bcrypt';
@@ -10,7 +9,6 @@ export class UserModel{
 
               // Create User \\
     async create(user:user_type):Promise<user_type>{
-       
         const {email,first_name,last_name,password}=user;
         //open connection
       try{  
@@ -45,7 +43,7 @@ export class UserModel{
     } 
 
     
-             //show me user by id \\   
+             //show me one user by id \\   
     async getUserById(id:Number):Promise<user_type>{
     try{
         const conn = await Client.connect();

@@ -13,56 +13,47 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
-const users_1 = require("../../models/users");
 const index_1 = __importDefault(require("../../index"));
 const request = (0, supertest_1.default)(index_1.default);
-const userModel = new users_1.UserModel();
-describe("User Controller", () => {
-    // let token:string,user_id = '';
-    // var token: string;
-    // var user:user_type ;
+const user = {
+    email: 'Ebtiso@gmail.com',
+    first_name: 'semo',
+    last_name: 'harbi',
+    password: 'tee123'
+};
+describe('Test user endpoint responses', () => {
+    let token;
     let userId;
-    it("gets the api endpoint /register", () => __awaiter(void 0, void 0, void 0, function* () {
-        const res = yield request.post("/register").send({
-            email: "test@gmail.com",
-            first_name: "test",
-            last_name: "test",
-            password: "password123",
-        });
-        userId = res.body.id;
-        expect(res.status).toBe(404);
+    it('Create user ', () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield request.post('/api/users/create').send(user);
+        token = response.body.token;
+        expect(response.status).toBe(201);
+    }));
+    it('Get all users as []', () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield request.get('/api/users')
+            .set("Authorization", `Bearer ${token}`);
+        expect(response.status).toBe(200);
+        const users = yield response.body;
+        expect(users[0]).toBeTruthy();
+    }));
+    it('Get user by id', () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield request.get('/api/users/10')
+            .set("Authorization", `Bearer ${token}`);
+        expect(response.status).toBe(200);
     }));
 });
-// it("Post /create , should return success for create user.",
-// async ():Promise<void>=>{
-// const user :object = {
-//     email:"test1@gmail.com",
-//     first_name:"test1",
-//     last_name:"test11",
-//     password:"123"
-// }
-// const res = await request.post('/create').send(user)
-// token = res.body.token;
-// const response = await request.post("/users/register").send(user);
-// expect(response.status).toBe(201);
-// expect(response.body.result).toEqual({
-//     email:"test1@gmail.com",
-//     first_name:"test1",
-//     last_name:"test11",
-// });
-// it('Get all /users ',async()=>{
-//     const response = await request.get('/users')
-//     .set('Authorization', 'Bearer ' + token);
-//     expect(response.status).toBe(404)
-//     const users = response.body as user_type[];
-//     expect(users[0]).toBeTruthy()
+// it('Update user by id',async()=>{
+//   const newUser:user_type = {
+//     id:userId ,
+//     email: 'test7@gmail.com',
+//     first_name: 'test',
+//     last_name: 'test',
+//     password: 'test123'
+//   }
+//   const res = await request.patch(`/api/users/${newUser.id}`)
+//   .set("Authorization", `Bearer ${token}`);
+//   expect(res.status).toBe(200)
+//   const User = res.body as user_type;
+//   expect(User.first_name).toBe("Hessah")
 // })
-// it('Get user by /id', async()=>{
-//     const response = await request.get('/users/1')
-//     .send({
-//         id:user.id
-//     })
-//     expect(response.status).toBe(404);
-//     expect(response.body).toBe(user)
-// });
-// })  
+// })

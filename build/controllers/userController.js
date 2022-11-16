@@ -16,7 +16,6 @@ exports.auth = exports.deleteUser = exports.update = exports.read = exports.inde
 const users_1 = require("../models/users");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const { TOKEN_SECRET } = process.env;
-//اخذ نسخه من هذا الموديل لان كلاس 
 const userModel = new users_1.UserModel();
 console.log("here");
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,12 +25,18 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const password = req.body.password;
     try {
         const newUser = yield userModel.create({ email, first_name, last_name, password });
-        let token = jsonwebtoken_1.default.sign({ email, first_name, last_name, password: newUser }, TOKEN_SECRET);
-        res.json({
-            status: 'Success',
-            data: { token },
-            message: 'User Creates Successfully !',
-        });
+        let token = jsonwebtoken_1.default.sign(newUser, TOKEN_SECRET);
+        if (newUser) {
+            res.status(201).json(token);
+        }
+        else {
+            res.status(400).json({ error: 'User was not created' });
+        }
+        //        res.json({
+        //        status:'Success', 
+        //        data:{ token , newUser},
+        //        message:'User Creates Successfully !',
+        //    });
     }
     catch (error) {
         throw (error);
@@ -44,7 +49,6 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.index = index;
 const read = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //اضافة try,catch 
     try {
         const userId = yield userModel.getUserById(req.params.id);
         if (userId != undefined) {
@@ -85,15 +89,25 @@ const update = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.update = update;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const delUser = yield userModel.delete(req.params.id);
-    res.json({
-        message: 'the user deleted Successfully .',
-    });
+    try {
+        const delUser = yield userModel.delete(req.params.id);
+        res.json({
+            message: 'the user deleted Successfully .',
+        });
+    }
+    catch (err) {
+        throw new Error(`${err}`);
+    }
 });
 exports.deleteUser = deleteUser;
 const auth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
-    const user = yield userModel.auth(email, password);
-    res.json(user);
+    try {
+        const { email, password } = req.body;
+        const user = yield userModel.auth(email, password);
+        res.json(user);
+    }
+    catch (err) {
+        throw new Error(`${err}`);
+    }
 });
 exports.auth = auth;

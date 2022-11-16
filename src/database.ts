@@ -9,13 +9,13 @@ const {
     POSTGRES_USER,
     POSTGRES_PASSWORD,
     POSTGRES_DB_test,
-    ENV
+    NODE_ENV
 } = process.env 
 
 
 const Client = new Pool({
     host: POSTGRES_HOST,
-    database: ENV === "dev" ? POSTGRES_DB : POSTGRES_DB_test,
+    database: NODE_ENV === "dev" ? POSTGRES_DB : POSTGRES_DB_test,
     user: POSTGRES_USER,
     password: POSTGRES_PASSWORD,
 })

@@ -24,7 +24,6 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             jsonwebtoken_1.default.verify(req.body.token, process.env.TOKEN_SECRET);
         }
         catch (err) {
-            res.status(401);
             res.json(`Invalid Token ${err}`);
             return;
         }
@@ -34,7 +33,7 @@ const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (err) {
-        throw new Error(`there is error in handlers ${err}`);
+        throw new Error(`there is error in handlers fuction ${err}`);
     }
 });
 exports.create = create;
@@ -46,10 +45,15 @@ const index = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.index = index;
 const show = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const orderId = yield orderModel.show(req.params.id);
-    res.json({
-        data: { orderId }
-    });
+    try {
+        const orderId = yield orderModel.show(req.params.id);
+        res.json({
+            data: { orderId }
+        });
+    }
+    catch (err) {
+        throw new Error(`${err}`);
+    }
 });
 exports.show = show;
 const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

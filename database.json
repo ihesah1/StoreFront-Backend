@@ -3,14 +3,14 @@
     "dev": {
       "driver": "pg",
       "host": "127.0.0.1",
-      "database": "store_db",
+      "database": "storefront_db",
       "user": "postgres",
       "password": "0551810546"
     },
     "test": {
       "driver": "pg",
       "host": "127.0.0.1",
-      "database": "store_db_test",
+      "database": "storefront_db_test",
       "user": "postgres",
       "password": "0551810546"
     }

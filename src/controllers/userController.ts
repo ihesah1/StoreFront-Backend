@@ -15,20 +15,27 @@ export const create = async( req:Request, res:Response)=>{
        const first_name = req.body.first_name as unknown as string
        const last_name = req.body.last_name as unknown as string
        const password = req.body.password as unknown as string
+    
     try{
-      
        const newUser:user_type = await userModel.create({email,first_name,last_name,password});
-       let token = jwt.sign({email,first_name,last_name,password:newUser},TOKEN_SECRET as string);
-       res.json({
-       status:'Success', 
-       data:{ token },
-       message:'User Creates Successfully !',
-   });
+       let token = jwt.sign(newUser,TOKEN_SECRET as string);
+       if (newUser) {
+        res.status(201).json(token);
+      } else {
+        res.status(400).json({ error: 'User was not created' });
+      }
+//        res.json({
+//        status:'Success', 
+//        data:{ token , newUser},
+//        message:'User Creates Successfully !',
+//    });
     
    }catch(error){
        throw (error)
    }
 }
+
+
 export const index = async (req:Request,res:Response)=>{
     const user:user_type[]= await userModel.index();
     res.json(user)

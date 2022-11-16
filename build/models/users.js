@@ -55,7 +55,7 @@ class UserModel {
             return result.rows;
         });
     }
-    //show me user by id \\   
+    //show me one user by id \\   
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
